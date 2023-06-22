@@ -1,10 +1,9 @@
 import pygame
 from constants import *
 from auxiliar import Auxiliar
-from plataforma import Platform
 
 
-class Player:
+class Character:
     def __init__(
         self,
         x,
@@ -50,30 +49,23 @@ class Player:
         )
 
         self.frame = 0
+        self.move_x = 0
+        self.move_y = 0
+        self.speed_walk = speed_walk
+        self.speed_run = speed_run
+        self.gravity = gravity
+        self.jump_velocity = jump_velocity
+        self.jump_high = jump_high
         self.animation = self.stay_r
         self.image = self.animation[self.frame]
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.move_x = 0
-        self.move_y = 0
-        self.lives = 3
-        self.speed_walk = speed_walk
-        self.speed_run = speed_run
-        self.jump_velocity = jump_velocity
-        self.jump_high = jump_high
-        self.gravity = gravity
         self.time_elapsed_ms = 0
-        self.jump_starting_pos_y = 0
-        self.is_jump = False
-        self.view_direction = VIEW_DIRECTION_R
         self.frame_rate_ms = frame_rate_ms
-        self.rect_bottom_collition = pygame.Rect(
-            self.rect.x + self.rect.w / 4,
-            self.rect.y + self.rect.h - 10,
-            self.rect.w / 2,
-            10,
-        )
+        self.jump_starting_pos_y = 0
+        self.view_direction = VIEW_DIRECTION_R
+        self.is_jump = False
 
     def stay(self):
         if self.animation != self.stay_l and self.animation != self.stay_r:
@@ -119,50 +111,26 @@ class Player:
             self.is_jump = False
             self.stay()
 
-    def update_moves(self, delta_ms, platform_list):
+    def update_moves(self, delta_ms):
         self.time_elapsed_ms += delta_ms
 
         if self.time_elapsed_ms >= self.frame_rate_ms:
             self.time_elapsed_ms = 0
 
+            print(self.rect.y)
             # Se va a ver el resultado de la resta entre jump_velocity and self.gravity que se ejecuta constantemente
 
-            # if abs(self.jump_starting_pos_y - self.rect.y) > self.jump_high and self.is_jump: Que simboliza esa resta?
-
-            if (
-                abs(self.jump_starting_pos_y - self.rect.y) > self.jump_high
-                and self.is_jump
-            ):
+            # if abs(self.jump_starting_pos_y - self.rect.y) > 200 and self.is_jump: Que simboliza esa resta?
+            if self.rect.y <= self.jump_high and self.is_jump:
                 self.move_y = 0
 
-            self.add_x(self.move_x)
-            self.add_y(self.move_y)
+            self.rect.x += self.move_x
+            self.rect.y += self.move_y
 
-            if not self.collide_platform(platform_list) and self.rect.y < 500:
-                self.add_y(self.gravity)
-
+            if self.rect.y < 500:
+                self.rect.y += self.gravity
             elif self.is_jump:
                 self.jump(False)
-
-    def collide_platform(self, platforms: list):
-        retorno = False
-        if self.rect.y >= GROUND_LEVEL:
-            return True
-        else:
-            for platform in platforms:
-                if self.rect_bottom_collition.colliderect(
-                    platform.rect_bottom_collition
-                ):
-                    return True
-        return retorno
-
-    def add_x(self, value):
-        self.rect.x += value
-        self.rect_bottom_collition.x += value
-
-    def add_y(self, value):
-        self.rect.y += value
-        self.rect_bottom_collition.y += value
 
     def update_animations(self, delta_ms):
         self.time_elapsed_ms += delta_ms
@@ -198,14 +166,10 @@ class Player:
         ):
             self.stay()
 
-    def update(self, delta_ms, platform_list):
+    def update(self, delta_ms):
         self.update_animations(delta_ms)
-        self.update_moves(delta_ms, platform_list)
+        self.update_moves(delta_ms)
 
-    def render(self, screen):
-        if DEBUG:
-            pygame.draw.rect(screen, RED, self.rect)
-            pygame.draw.rect(screen, GREEN, self.rect_bottom_collition)
-
+    def draw(self, screen):
         self.image = self.animation[self.frame]
         screen.blit(self.image, self.rect)
