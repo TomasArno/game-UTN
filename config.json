@@ -1,0 +1,71 @@
+{
+  "sprites": {
+    "mask_dude": {
+      "stay": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Mask Dude/Idle (32x32).png",
+      "walk": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Mask Dude/Walk (32x32).png",
+      "jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Mask Dude/Jump (32x32).png",
+      "wall_jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Mask Dude/Wall Jump (32x32).png",
+      "fall": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Mask Dude/Fall (32x32).png",
+      "double_jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Mask Dude/Double Jump (32x32).png",
+      "dead": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Desappearing (96x96).png"
+    },
+    "ninja_frog": {
+      "stay": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Ninja Frog/Idle (32x32).png",
+      "walk": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Ninja Frog/Walk (32x32).png",
+      "jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Ninja Frog/Jump (32x32).png",
+      "wall_jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Ninja Frog/Wall Jump (32x32).png",
+      "fall": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Ninja Frog/Fall (32x32).png",
+      "double_jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Ninja Frog/Double Jump (32x32).png",
+      "dead": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Desappearing (96x96).png"
+    },
+    "pink_man": {
+      "stay": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Pink Man/Idle (32x32).png",
+      "walk": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Pink Man/Walk (32x32).png",
+      "jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Pink Man/Jump (32x32).png",
+      "wall_jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Pink Man/Wall Jump (32x32).png",
+      "fall": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Pink Man/Fall (32x32).png",
+      "double_jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Pink Man/Double Jump (32x32).png",
+      "dead": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Desappearing (96x96).png"
+    },
+    "virtual_guy": {
+      "stay": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Virtual Guy/Idle (32x32).png",
+      "walk": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Virtual Guy/Walk (32x32).png",
+      "jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Virtual Guy/Jump (32x32).png",
+      "wall_jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Virtual Guy/Wall Jump (32x32).png",
+      "fall": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Virtual Guy/Fall (32x32).png",
+      "double_jump": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Virtual Guy/Double Jump (32x32).png",
+      "dead": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Desappearing (96x96).png"
+    },
+    "enemy_pig": {
+      "stay": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Idle (36x30).png",
+      "walk": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Walk (36x30).png",
+      "run": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Run (36x30).png"
+    }
+  },
+  "levels": {
+    "level_1": {
+      "background_image": "",
+      "platforms": [],
+      "enemy": {
+        "walk": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Walk (36x30).png",
+        "run": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Run (36x30).png"
+      }
+    },
+    "level_2": {
+      "background_image": "",
+      "platforms": [],
+      "enemy": {
+        "walk": "",
+        "run": ""
+      }
+    },
+    "level_3": {
+      "background_image": "",
+      "platforms": [],
+      "enemy": {
+        "walk": "",
+        "run": ""
+      }
+    }
+  }
+}

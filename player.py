@@ -1,12 +1,13 @@
 import pygame
 from constants import *
 from auxiliar import Auxiliar
-from plataforma import Platform
+from enemy import Enemy
 
 
 class Player:
     def __init__(
         self,
+        character,
         x,
         y,
         speed_walk,
@@ -17,57 +18,55 @@ class Player:
         jump_high,
     ) -> None:
         self.stay_r = Auxiliar.getSurfaceFromSpriteSheet(
-            f"{PATH_IMAGES}/caracters/stink/idle.png",
-            16,
-            1,
+            Auxiliar.getSpritesOfCharacter(character)["stay"], 11, 1
         )
 
         self.stay_l = Auxiliar.getSurfaceFromSpriteSheet(
-            f"{PATH_IMAGES}/caracters/stink/idle.png",
-            16,
-            1,
-            True,
+            Auxiliar.getSpritesOfCharacter(character)["stay"], 11, 1, True
         )
 
         self.walk_r = Auxiliar.getSurfaceFromSpriteSheet(
-            f"{PATH_IMAGES}/caracters/stink/walk.png",
-            15,
-            1,
-        )[:12]
+            Auxiliar.getSpritesOfCharacter(character)["walk"], 12, 1
+        )
 
         self.walk_l = Auxiliar.getSurfaceFromSpriteSheet(
-            f"{PATH_IMAGES}/caracters/stink/walk.png",
-            15,
-            1,
-            True,
-        )[:12]
+            Auxiliar.getSpritesOfCharacter(character)["walk"], 12, 1, True
+        )
 
         self.jump_r = Auxiliar.getSurfaceFromSpriteSheet(
-            f"{PATH_IMAGES}/caracters/stink/jump.png", 33, 1, False
+            Auxiliar.getSpritesOfCharacter(character)["jump"], 1, 1
         )
         self.jump_l = Auxiliar.getSurfaceFromSpriteSheet(
-            f"{PATH_IMAGES}/caracters/stink/jump.png", 33, 1, True
+            Auxiliar.getSpritesOfCharacter(character)["jump"], 1, 1, True
         )
 
-        self.frame = 0
+        self.dead_r = Auxiliar.getSurfaceFromSpriteSheet(
+            Auxiliar.getSpritesOfCharacter(character)["dead"], 7, 1, True
+        )
+
+        self.dead_l = Auxiliar.getSurfaceFromSpriteSheet(
+            Auxiliar.getSpritesOfCharacter(character)["dead"], 7, 1
+        )
+        self.is_dead = False
+        self.frame: int = 0
         self.animation = self.stay_r
         self.image = self.animation[self.frame]
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect: pygame.Rect = self.image.get_rect()
+        self.rect.x: int = x
+        self.rect.y: int = y
         self.move_x = 0
         self.move_y = 0
+        self.speed_walk: int = speed_walk
+        self.speed_run: int = speed_run
+        self.gravity: int = gravity
+        self.time_elapsed_ms = 0
+        self.view_direction: bool = VIEW_DIRECTION_R
+        self.frame_rate_ms = frame_rate_ms
         self.lives = 3
-        self.speed_walk = speed_walk
-        self.speed_run = speed_run
         self.jump_velocity = jump_velocity
         self.jump_high = jump_high
-        self.gravity = gravity
-        self.time_elapsed_ms = 0
         self.jump_starting_pos_y = 0
         self.is_jump = False
-        self.view_direction = VIEW_DIRECTION_R
-        self.frame_rate_ms = frame_rate_ms
         self.rect_bottom_collition = pygame.Rect(
             self.rect.x + self.rect.w / 4,
             self.rect.y + self.rect.h - 10,
@@ -119,30 +118,44 @@ class Player:
             self.is_jump = False
             self.stay()
 
-    def update_moves(self, delta_ms, platform_list):
-        self.time_elapsed_ms += delta_ms
+    def dead(self):
+        self.frame = 0
 
-        if self.time_elapsed_ms >= self.frame_rate_ms:
-            self.time_elapsed_ms = 0
+        if self.view_direction:
+            self.animation = self.dead_r
+        else:
+            self.animation = self.dead_l
 
-            # Se va a ver el resultado de la resta entre jump_velocity and self.gravity que se ejecuta constantemente
+    def events(
+        self, keys_pressed, delta_ms
+    ):  # ver como hacer desaparecer al player tras morir
+        if self.is_dead:
+            self.dead()
 
-            # if abs(self.jump_starting_pos_y - self.rect.y) > self.jump_high and self.is_jump: Que simboliza esa resta?
+        elif keys_pressed[pygame.K_RIGHT] and not keys_pressed[pygame.K_LEFT]:
+            self.walk(VIEW_DIRECTION_R)
 
-            if (
-                abs(self.jump_starting_pos_y - self.rect.y) > self.jump_high
-                and self.is_jump
-            ):
-                self.move_y = 0
+        elif keys_pressed[pygame.K_LEFT] and not keys_pressed[pygame.K_RIGHT]:
+            self.walk(VIEW_DIRECTION_L)
 
-            self.add_x(self.move_x)
-            self.add_y(self.move_y)
+        elif keys_pressed[pygame.K_SPACE]:
+            self.jump(True)
 
-            if not self.collide_platform(platform_list) and self.rect.y < 500:
-                self.add_y(self.gravity)
+        elif (
+            keys_pressed[pygame.K_LEFT]
+            and keys_pressed[pygame.K_RIGHT]
+            and not keys_pressed[pygame.K_SPACE]
+            and not self.is_dead
+        ):
+            self.stay()
 
-            elif self.is_jump:
-                self.jump(False)
+        elif (
+            not keys_pressed[pygame.K_LEFT]
+            and not keys_pressed[pygame.K_RIGHT]
+            and not keys_pressed[pygame.K_SPACE]
+            and not self.is_dead
+        ):
+            self.stay()
 
     def collide_platform(self, platforms: list):
         retorno = False
@@ -156,6 +169,11 @@ class Player:
                     return True
         return retorno
 
+    def collide_enemy(self, enemies_list):
+        for enemy in enemies_list:
+            if self.rect.colliderect(enemy.rect):
+                return True
+
     def add_x(self, value):
         self.rect.x += value
         self.rect_bottom_collition.x += value
@@ -163,6 +181,30 @@ class Player:
     def add_y(self, value):
         self.rect.y += value
         self.rect_bottom_collition.y += value
+
+    def update_moves(self, delta_ms, platform_list, enemies_list):
+        self.time_elapsed_ms += delta_ms
+
+        if self.time_elapsed_ms >= self.frame_rate_ms:
+            self.time_elapsed_ms = 0
+
+            if (
+                abs(self.jump_starting_pos_y - self.rect.y) > self.jump_high
+                and self.is_jump
+            ):
+                self.move_y = 0
+
+            self.add_x(self.move_x)
+            self.add_y(self.move_y)
+
+            if self.collide_enemy(enemies_list):
+                self.is_dead = True
+
+            if not self.collide_platform(platform_list) and self.rect.y < GROUND_LEVEL:
+                self.add_y(self.gravity)
+
+            elif self.is_jump:
+                self.jump(False)
 
     def update_animations(self, delta_ms):
         self.time_elapsed_ms += delta_ms
@@ -174,33 +216,9 @@ class Player:
             else:
                 self.frame = 0
 
-    def events(self, keys_pressed, delta_ms):
-        if keys_pressed[pygame.K_RIGHT] and not keys_pressed[pygame.K_LEFT]:
-            self.walk(VIEW_DIRECTION_R)
-
-        elif keys_pressed[pygame.K_LEFT] and not keys_pressed[pygame.K_RIGHT]:
-            self.walk(VIEW_DIRECTION_L)
-
-        elif keys_pressed[pygame.K_SPACE]:
-            self.jump(True)
-
-        elif (
-            keys_pressed[pygame.K_LEFT]
-            and keys_pressed[pygame.K_RIGHT]
-            and not keys_pressed[pygame.K_SPACE]
-        ):
-            self.stay()
-
-        elif (
-            not keys_pressed[pygame.K_LEFT]
-            and not keys_pressed[pygame.K_RIGHT]
-            and not keys_pressed[pygame.K_SPACE]
-        ):
-            self.stay()
-
-    def update(self, delta_ms, platform_list):
+    def update(self, delta_ms, platform_list, enemies_list):
+        self.update_moves(delta_ms, platform_list, enemies_list)
         self.update_animations(delta_ms)
-        self.update_moves(delta_ms, platform_list)
 
     def render(self, screen):
         if DEBUG:
@@ -208,4 +226,5 @@ class Player:
             pygame.draw.rect(screen, GREEN, self.rect_bottom_collition)
 
         self.image = self.animation[self.frame]
+        # self.image = pygame.transform.scale(self.image, (60, 60))
         screen.blit(self.image, self.rect)
