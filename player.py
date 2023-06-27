@@ -1,7 +1,6 @@
 import pygame
 from constants import *
 from auxiliar import Auxiliar
-from enemy import Enemy
 
 
 class Player:
@@ -14,8 +13,9 @@ class Player:
         speed_run,
         gravity,
         jump_velocity,
-        frame_rate_ms,
         jump_high,
+        frame_rate_movements_ms,
+        frame_rate_animation_ms,
     ) -> None:
         self.stay_r = Auxiliar.getSurfaceFromSpriteSheet(
             Auxiliar.getSpritesOfCharacter(character)["stay"], 11, 1
@@ -36,6 +36,7 @@ class Player:
         self.jump_r = Auxiliar.getSurfaceFromSpriteSheet(
             Auxiliar.getSpritesOfCharacter(character)["jump"], 1, 1
         )
+
         self.jump_l = Auxiliar.getSurfaceFromSpriteSheet(
             Auxiliar.getSpritesOfCharacter(character)["jump"], 1, 1, True
         )
@@ -47,7 +48,6 @@ class Player:
         self.dead_l = Auxiliar.getSurfaceFromSpriteSheet(
             Auxiliar.getSpritesOfCharacter(character)["dead"], 7, 1
         )
-        self.is_dead = False
         self.frame: int = 0
         self.animation = self.stay_r
         self.image = self.animation[self.frame]
@@ -61,7 +61,8 @@ class Player:
         self.gravity: int = gravity
         self.time_elapsed_ms = 0
         self.view_direction: bool = VIEW_DIRECTION_R
-        self.frame_rate_ms = frame_rate_ms
+        self.frame_rate_movements_ms = frame_rate_movements_ms
+        self.frame_rate_animation_ms = frame_rate_animation_ms
         self.lives = 3
         self.jump_velocity = jump_velocity
         self.jump_high = jump_high
@@ -73,6 +74,20 @@ class Player:
             self.rect.w / 2,
             10,
         )
+
+        self.is_dead = False
+        self.dead_flag = False
+        self.finish_dead_animation = False
+
+    # @property ANIMATION RECIBE LISTA Y DEBE SER UNA SUEPRFICIE PARA FUNCIONAR
+
+    # def animation(self):
+    #     return self.__animation
+
+    # @animation.setter
+    # def animation(self, animation):
+    #     scaled_animation = pygame.transform.scale(animation, (50, 50))
+    #     self.__animation = scaled_animation
 
     def stay(self):
         if self.animation != self.stay_l and self.animation != self.stay_r:
@@ -119,43 +134,46 @@ class Player:
             self.stay()
 
     def dead(self):
-        self.frame = 0
+        if not self.dead_flag:
+            print("dead")
+            self.dead_flag = True
+            self.frame = 0
 
-        if self.view_direction:
-            self.animation = self.dead_r
-        else:
-            self.animation = self.dead_l
+            if self.view_direction:
+                self.animation = self.dead_r
+            else:
+                self.animation = self.dead_l
 
     def events(
         self, keys_pressed, delta_ms
     ):  # ver como hacer desaparecer al player tras morir
         if self.is_dead:
             self.dead()
+        else:
+            if keys_pressed[pygame.K_SPACE]:
+                self.jump(True)
 
-        elif keys_pressed[pygame.K_RIGHT] and not keys_pressed[pygame.K_LEFT]:
-            self.walk(VIEW_DIRECTION_R)
+            elif keys_pressed[pygame.K_RIGHT] and not keys_pressed[pygame.K_LEFT]:
+                self.walk(VIEW_DIRECTION_R)
 
-        elif keys_pressed[pygame.K_LEFT] and not keys_pressed[pygame.K_RIGHT]:
-            self.walk(VIEW_DIRECTION_L)
+            elif keys_pressed[pygame.K_LEFT] and not keys_pressed[pygame.K_RIGHT]:
+                self.walk(VIEW_DIRECTION_L)
 
-        elif keys_pressed[pygame.K_SPACE]:
-            self.jump(True)
+            elif (
+                keys_pressed[pygame.K_LEFT]
+                and keys_pressed[pygame.K_RIGHT]
+                and not keys_pressed[pygame.K_SPACE]
+                and not self.is_dead
+            ):
+                self.stay()
 
-        elif (
-            keys_pressed[pygame.K_LEFT]
-            and keys_pressed[pygame.K_RIGHT]
-            and not keys_pressed[pygame.K_SPACE]
-            and not self.is_dead
-        ):
-            self.stay()
-
-        elif (
-            not keys_pressed[pygame.K_LEFT]
-            and not keys_pressed[pygame.K_RIGHT]
-            and not keys_pressed[pygame.K_SPACE]
-            and not self.is_dead
-        ):
-            self.stay()
+            elif (
+                not keys_pressed[pygame.K_LEFT]
+                and not keys_pressed[pygame.K_RIGHT]
+                and not keys_pressed[pygame.K_SPACE]
+                and not self.is_dead
+            ):
+                self.stay()
 
     def collide_platform(self, platforms: list):
         retorno = False
@@ -171,7 +189,9 @@ class Player:
 
     def collide_enemy(self, enemies_list):
         for enemy in enemies_list:
-            if self.rect.colliderect(enemy.rect):
+            if self.rect.colliderect(enemy.rect) and not self.rect.colliderect(
+                enemy.rect_top_collition
+            ):
                 return True
 
     def add_x(self, value):
@@ -185,7 +205,7 @@ class Player:
     def update_moves(self, delta_ms, platform_list, enemies_list):
         self.time_elapsed_ms += delta_ms
 
-        if self.time_elapsed_ms >= self.frame_rate_ms:
+        if self.time_elapsed_ms >= self.frame_rate_movements_ms:
             self.time_elapsed_ms = 0
 
             if (
@@ -206,14 +226,18 @@ class Player:
             elif self.is_jump:
                 self.jump(False)
 
-    def update_animations(self, delta_ms):
+    def update_animations(
+        self, delta_ms
+    ):  # preguntar porque se queda congelado si le subo el animation rate_ms
         self.time_elapsed_ms += delta_ms
 
-        if self.time_elapsed_ms >= self.frame_rate_ms:
+        if self.time_elapsed_ms >= self.frame_rate_animation_ms:
             self.time_elapsed_ms = 0
             if self.frame < len(self.animation) - 1:
                 self.frame += 1
             else:
+                if self.is_dead:
+                    self.finish_dead_animation = True
                 self.frame = 0
 
     def update(self, delta_ms, platform_list, enemies_list):
@@ -225,6 +249,6 @@ class Player:
             pygame.draw.rect(screen, RED, self.rect)
             pygame.draw.rect(screen, GREEN, self.rect_bottom_collition)
 
-        self.image = self.animation[self.frame]
-        # self.image = pygame.transform.scale(self.image, (60, 60))
-        screen.blit(self.image, self.rect)
+        if not self.finish_dead_animation:
+            self.image = self.animation[self.frame]
+            screen.blit(self.image, self.rect)

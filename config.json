@@ -39,17 +39,15 @@
     "enemy_pig": {
       "stay": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Idle (36x30).png",
       "walk": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Walk (36x30).png",
-      "run": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Run (36x30).png"
+      "run": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Run (36x30).png",
+      "dead": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Main Characters/Desappearing (96x96).png"
     }
   },
   "levels": {
     "level_1": {
-      "background_image": "",
+      "background_image": "images/locations/forest/all.png",
       "platforms": [],
-      "enemy": {
-        "walk": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Walk (36x30).png",
-        "run": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Enemies/AngryPig/Run (36x30).png"
-      }
+      "enemies": []
     },
     "level_2": {
       "background_image": "",

@@ -42,3 +42,6 @@ class Auxiliar:
         for character in characters_data:
             if re.search(character_name.lower(), character):
                 return characters_data[character]
+
+    def set_background_level(level):
+        return Auxiliar.leer_json("config.json", "levels")[level]["background_image"]
