@@ -44,26 +44,291 @@
     }
   },
   "levels": {
-    "level_1": {
-      "background_image": "images/locations/forest/all.png",
-      "platforms": [],
-      "enemies": []
+    "l1": {
+      "background_image": "images/locations/set_bg_01/forest.png",
+      "item_image": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Items/Fruits/Apple.png",
+      "platforms": [
+        {
+          "x": 400,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 0
+        },
+        {
+          "x": 450,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 500,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 2
+        },
+        {
+          "x": 600,
+          "y": 430,
+          "w": 50,
+          "h": 50,
+          "type": 12
+        },
+        {
+          "x": 650,
+          "y": 430,
+          "w": 50,
+          "h": 50,
+          "type": 14
+        },
+        {
+          "x": 750,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 12
+        },
+        {
+          "x": 800,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 13
+        },
+        {
+          "x": 850,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 13
+        },
+        {
+          "x": 900,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 14
+        }
+      ],
+      "items": [
+        {
+          "x": 900,
+          "y": 330,
+          "w": 50,
+          "h": 50,
+          "frame_rate_ms": 80,
+          "move_rate_ms": 80,
+          "is_active": true
+        }
+      ],
+      "enemies": [
+        {
+          "x": 900,
+          "y": 400,
+          "speed_walk": 6,
+          "speed_run": 5,
+          "gravity": 14,
+          "jump_power": 30,
+          "frame_rate_ms": 150,
+          "move_rate_ms": 50,
+          "jump_height": 140,
+          "p_scale": 0.08,
+          "interval_time_jump": 300,
+          "is_active": true
+        }
+      ]
     },
-    "level_2": {
-      "background_image": "",
-      "platforms": [],
-      "enemy": {
-        "walk": "",
-        "run": ""
-      }
+    "l2": {
+      "background_image": "images/locations/set_bg_02/jungle.jpg",
+      "platforms": [
+        {
+          "x": 400,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 0
+        },
+        {
+          "x": 450,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 500,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 2
+        },
+        {
+          "x": 600,
+          "y": 430,
+          "w": 50,
+          "h": 50,
+          "type": 12
+        },
+        {
+          "x": 650,
+          "y": 430,
+          "w": 50,
+          "h": 50,
+          "type": 14
+        },
+        {
+          "x": 750,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 12
+        },
+        {
+          "x": 800,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 13
+        },
+        {
+          "x": 850,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 13
+        },
+        {
+          "x": 900,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 14
+        }
+      ],
+      "items": [
+        {
+          "x": 900,
+          "y": 330,
+          "w": 50,
+          "h": 50,
+          "frame_rate_ms": 80,
+          "move_rate_ms": 80,
+          "is_active": true
+        }
+      ],
+      "enemies": [
+        {
+          "x": 900,
+          "y": 400,
+          "speed_walk": 6,
+          "speed_run": 5,
+          "gravity": 14,
+          "jump_power": 30,
+          "frame_rate_ms": 150,
+          "move_rate_ms": 50,
+          "jump_height": 140,
+          "p_scale": 0.08,
+          "interval_time_jump": 300,
+          "is_active": true
+        }
+      ]
     },
-    "level_3": {
+    "l3": {
       "background_image": "",
-      "platforms": [],
-      "enemy": {
-        "walk": "",
-        "run": ""
-      }
+      "platforms": [
+        {
+          "x": 400,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 0
+        },
+        {
+          "x": 450,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 500,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 2
+        },
+        {
+          "x": 600,
+          "y": 430,
+          "w": 50,
+          "h": 50,
+          "type": 12
+        },
+        {
+          "x": 650,
+          "y": 430,
+          "w": 50,
+          "h": 50,
+          "type": 14
+        },
+        {
+          "x": 750,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 12
+        },
+        {
+          "x": 800,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 13
+        },
+        {
+          "x": 850,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 13
+        },
+        {
+          "x": 900,
+          "y": 360,
+          "w": 50,
+          "h": 50,
+          "type": 14
+        }
+      ],
+      "items": [
+        {
+          "x": 900,
+          "y": 330,
+          "w": 50,
+          "h": 50,
+          "frame_rate_ms": 80,
+          "move_rate_ms": 80,
+          "is_active": true
+        }
+      ],
+      "enemies": [
+        {
+          "x": 900,
+          "y": 400,
+          "speed_walk": 6,
+          "speed_run": 5,
+          "gravity": 14,
+          "jump_power": 30,
+          "frame_rate_ms": 150,
+          "move_rate_ms": 50,
+          "jump_height": 140,
+          "p_scale": 0.08,
+          "interval_time_jump": 300,
+          "is_active": true
+        }
+      ]
     }
   }
 }
