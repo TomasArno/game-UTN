@@ -34,8 +34,8 @@ class Bullet:
         angle = math.atan2(
             y_end - y_init, x_end - x_init
         )  # Obtengo el angulo en radianes
-        print("El angulo engrados es:", int(angle * 180 / math.pi))
-        print("rect bullet", self.rect)
+        # print("El angulo engrados es:", int(angle * 180 / math.pi))
+        # print("rect bullet", self.rect)
 
         self.move_x = math.cos(angle) * speed
         self.move_y = math.sin(angle) * speed
@@ -45,7 +45,6 @@ class Bullet:
     def change_x(self, delta_x):
         self.x = self.x + delta_x
         self.rect.x = int(self.x)
-        print(self.rect.x)
 
     def change_y(self, delta_y):
         self.y = self.y + delta_y
@@ -57,27 +56,30 @@ class Bullet:
             self.tiempo_transcurrido_move = 0
             self.change_x(self.move_x)
             self.change_y(self.move_y)
-            self.check_impact(plataform_list, enemy_list)
+            self.check_impact(plataform_list, enemy_list, player)
 
-    def do_animation(self, delta_ms):
-        self.tiempo_transcurrido_animation += delta_ms
-        if self.tiempo_transcurrido_animation >= self.frame_rate_ms:
-            self.tiempo_transcurrido_animation = 0
-            pass
+    # def do_animation(self, delta_ms):
+    #     self.tiempo_transcurrido_animation += delta_ms
+    #     if self.tiempo_transcurrido_animation >= self.frame_rate_ms:
+    #         self.tiempo_transcurrido_animation = 0
+    #         pass
 
-    def check_impact(self, plataform_list, enemy_list):
+    def check_impact(self, plataform_list, enemy_list, player):
         for aux_enemy in enemy_list:
             if self.owner != aux_enemy and self.rect.colliderect(
                 aux_enemy.collition_rect
             ):
-                print("IMPACTO ENEMY")
-                aux_enemy.receive_shoot = True
+                aux_enemy.receive_attack("bullet", player)
+                self.is_active = False
+
+        for platform in plataform_list:
+            if self.rect.colliderect(platform.rect):
                 self.is_active = False
 
     def update(self, delta_ms, plataform_list, enemy_list, player):
         if self.is_active and self.rect.x > 0 and self.rect.x < ANCHO_VENTANA:
             self.do_movement(delta_ms, plataform_list, enemy_list, player)
-            self.do_animation(delta_ms)
+            # self.do_animation(delta_ms)
 
     def draw(self, screen):
         if self.is_active and self.rect.x > 0 and self.rect.x < ANCHO_VENTANA:

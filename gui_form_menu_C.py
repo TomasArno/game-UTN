@@ -9,7 +9,7 @@ import pygame
 import sqlite3
 
 
-class FormMenuB(Form):
+class FormMenuC(Form):
     def __init__(
         self, name, master_surface, w, h, image_background, color_border, active
     ):
@@ -25,47 +25,46 @@ class FormMenuB(Form):
             y=ALTO_VENTANA / 2 - h / 2,
         )
 
-        # self.boton1 = Button(
-        #     master=self,
-        #     x=0,
-        #     y=150,
-        #     w=200,
-        #     h=40,
-        #     color_background=C_GREEEN_2,
-        #     color_border=C_YELLOW_2,
-        #     on_click=self.on_click_boton,
-        #     on_click_param="form_game_L2",
-        #     text="CONTINUE",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_BLACK,
-        # )
-        # self.boton2 = Button(
-        #     master=self,
-        #     x=0,
-        #     y=200,
-        #     w=200,
-        #     h=40,
-        #     color_background=C_PINK,
-        #     color_border=C_RED,
-        #     on_click=self.on_click_boton,
-        #     on_click_param="form_menu_A",
-        #     text="BACK",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_BLACK,
-        # )
-        self.boton2 = Button(
+        self.pb1 = ProgressBar(
             master=self,
-            x=self.w / 2 - 130,
-            y=self.h - 60,
-            w=60,
+            x=100,
+            y=180,
+            w=300,
             h=50,
             color_background=None,
             color_border=None,
-            image_background="images/gui/jungle/btn/menu.png",
-            on_click=self.on_click_boton,
-            on_click_param="form_menu_A",
+            image_background="images/gui/set_gui_01/Comic_Border/Bars/Bar_Background01.png",
+            image_progress="images/gui/set_gui_01/Comic_Border/Bars/Bar_Segment05.png",
+            value=3,
+            value_max=8,
+        )
+
+        self.boton1 = Button(
+            master=self,
+            x=150,
+            y=260,
+            w=100,
+            h=50,
+            color_background=None,
+            color_border=None,
+            image_background="images/gui/jungle/btn/prew.png",
+            on_click=self.on_click_boton2,
+            on_click_param="",
+            font="Verdana",
+            font_size=30,
+            font_color=C_WHITE,
+        )
+        self.boton2 = Button(
+            master=self,
+            x=270,
+            y=260,
+            w=100,
+            h=50,
+            color_background=None,
+            color_border=None,
+            image_background="images/gui/jungle/btn/next.png",
+            on_click=self.on_click_boton1,
+            on_click_param="",
             font="Verdana",
             font_size=30,
             font_color=C_WHITE,
@@ -73,92 +72,64 @@ class FormMenuB(Form):
 
         self.boton3 = Button(
             master=self,
-            x=self.w / 2 - 60,
+            x=self.w / 3 - 30,
             y=self.h - 60,
             w=60,
             h=50,
             color_background=None,
             color_border=None,
-            image_background="images/gui/jungle/btn/play.png",
-            on_click=self.on_click_boton,
-            on_click_param="form_game_L1",
+            image_background="images/gui/jungle/btn/ok.png",
+            on_click=self.on_click_boton4,
+            on_click_param="form_menu_B",
             font="Verdana",
             font_size=30,
             font_color=C_WHITE,
         )
         self.boton4 = Button(
             master=self,
-            x=self.w / 2 + 130,
+            x=self.w / 2 - 30,
             y=self.h - 60,
             w=60,
             h=50,
             color_background=None,
             color_border=None,
-            image_background="images/gui/jungle/menu/setting.png",
-            on_click=self.on_click_boton,
-            on_click_param="form_menu_C",
+            image_background="images/gui/jungle/btn/sound_off.png",
+            on_click=self.on_click_boton3,
+            on_click_param="",
             font="Verdana",
             font_size=30,
             font_color=C_WHITE,
         )
-        # self.boton4 = Button(
-        #     master=self,
-        #     x=0,
-        #     y=300,
-        #     w=200,
-        #     h=40,
-        #     color_background=C_PINK,
-        #     color_border=C_RED,
-        #     on_click=self.on_click_boton,
-        #     on_click_param="",
-        #     text="MOSTRAR",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_BLACK,
-        # )
-
-        # self.txt1 = TextBox(
-        #     master=self,
-        #     x=0,
-        #     y=50,
-        #     w=240,
-        #     h=40,
-        #     color_background=None,
-        #     color_border=None,
-        #     image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_XL_08.png",
-        #     text="Text",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_BLACK,
-        # )
-        # self.txt2 = TextBox(
-        #     master=self,
-        #     x=0,
-        #     y=100,
-        #     w=240,
-        #     h=40,
-        #     color_background=None,
-        #     color_border=None,
-        #     image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_XL_08.png",
-        #     text="Text",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_BLACK,
-        # )
 
         self.lista_widget = [
-            # self.boton1,
+            self.boton1,
             self.boton2,
             self.boton3,
             self.boton4,
-            # self.txt1,
-            # self.txt2,
+            self.pb1,
         ]
 
-    def on_click_boton(self, parametro):
+    def on_click_boton1(self, parametro):
+        self.pb1.value += 1
+
+    def on_click_boton2(self, parametro):
+        self.pb1.value -= 1
+
+    def on_click_boton3(self, parametro):
+        self.pb1.value = 0
+
+    def on_click_boton4(self, parametro):
         self.set_active(parametro)
 
-    # def on_click_boton(self, parametro):
+    # def on_click_boton1(self, parametro):
+    #     # print(self.get_actual_level())
+    #     # self.set_active(self.get_actual_level())
+    #     pass
+
+    # def on_click_boton2(self, parametro):
+    #     # self.set_active(parametro)
+    #     pass
+
     #     import sqlite3
 
     #     with sqlite3.connect("db/db_score.db") as conexion:
@@ -171,7 +142,7 @@ class FormMenuB(Form):
     #         except:
     #             print("Error")
 
-    # def on_click_boton(self, parametro):
+    # def on_click_boton3(self, parametro):
     #     with sqlite3.connect("db/db_score.db") as conexion:
     #         try:
     #             sentencia = """ create  table score
@@ -186,7 +157,7 @@ class FormMenuB(Form):
     #         except sqlite3.OperationalError:
     #             print("La tabla ya existe")
 
-    # def on_click_boton(self, parametro):
+    # def on_click_boton4(self, parametro):
     #     with sqlite3.connect("db/db_score.db") as conexion:
     #         cursor = conexion.execute("SELECT * FROM score")
     #         for fila in cursor:
@@ -202,7 +173,7 @@ class FormMenuB(Form):
             aux_widget.draw()
 
         image = pygame.transform.scale(
-            pygame.image.load("images/gui/jungle/pause/header.png"),
+            pygame.image.load("images/gui/jungle/settings/92.png"),
             (self.w, 150),
         ).convert_alpha()
 

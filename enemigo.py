@@ -103,7 +103,6 @@ class Enemy:
         self.is_knife = False
         self.is_active = True
 
-        self.receive_shoot = False
         self.finish_dead_animation = False
 
         self.tiempo_transcurrido_animation = 0
@@ -114,7 +113,7 @@ class Enemy:
         self.jump_height = jump_height
 
         self.tiempo_transcurrido = 0
-        self.tiempo_last_jump = 0  # en base al tiempo transcurrido general
+        self.tiempo_last_jump = 0
         self.interval_time_jump = interval_time_jump
 
     def is_on_plataform(self, plataform_list):
@@ -130,6 +129,18 @@ class Enemy:
                     retorno = True
                     break
         return retorno
+
+    def check_life(self):
+        if self.lives <= 0:
+            self.is_active = False
+
+    def receive_attack(self, element, player):
+        if element == "bullet":
+            self.lives -= 2
+            player.score += 100
+        else:
+            self.lives -= 1
+            player.score += 200
 
     def check_view_direction(self):
         if self.direction == DIRECTION_L:
@@ -152,16 +163,17 @@ class Enemy:
 
         if self.tiempo_transcurrido_move >= self.move_rate_ms:
             self.tiempo_transcurrido_move = 0
+            self.check_life()
 
-            if not self.is_on_plataform(plataform_list):
-                if self.move_y == 0:
-                    self.is_fall = True
-                    self.change_y(self.gravity)
+            if self.is_active:
+                if not self.is_on_plataform(plataform_list):
+                    if self.move_y == 0:
+                        self.is_fall = True
+                        self.change_y(self.gravity)
 
-            else:
-                self.is_fall = False
+                else:
+                    self.is_fall = False
 
-                if not self.receive_shoot:
                     if (
                         self.animation != self.attack_l
                         and self.animation != self.attack_r
@@ -190,21 +202,22 @@ class Enemy:
                         else:
                             self.animation = self.attack_r
 
-                        player.receive_attack()
-                    else:  # no funciona
+                    else:
                         if self.check_view_direction():
                             self.animation = self.walk_l
 
                         else:
                             self.animation = self.walk_r
 
-                elif self.check_view_direction():
+            elif self.animation != self.die_l and self.animation != self.die_r:
+                if self.check_view_direction():
                     self.animation = self.die_l
-
                 else:
                     self.animation = self.die_r
 
-    def do_animation(self, delta_ms):
+                self.frame = 0
+
+    def do_animation(self, delta_ms, player):
         self.tiempo_transcurrido_animation += delta_ms
         if self.tiempo_transcurrido_animation >= self.frame_rate_ms:
             self.tiempo_transcurrido_animation = 0
@@ -212,14 +225,16 @@ class Enemy:
                 self.frame += 1
             else:
                 self.frame = 0
-                if self.receive_shoot:
+
+                if self.animation == self.attack_l or self.animation == self.attack_r:
+                    player.receive_attack()
+                if not self.is_active:
                     self.finish_dead_animation = True
-                    self.is_active = False
 
     def update(self, delta_ms, plataform_list, player):
         if not self.finish_dead_animation:
             self.do_movement(delta_ms, plataform_list, player)
-            self.do_animation(delta_ms)
+            self.do_animation(delta_ms, player)
 
     def draw(self, screen):
         if DEBUG:

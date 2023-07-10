@@ -49,6 +49,27 @@
       "item_image": "images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Items/Fruits/Apple.png",
       "platforms": [
         {
+          "x": 100,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 0
+        },
+        {
+          "x": 150,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 200,
+          "y": 500,
+          "w": 50,
+          "h": 50,
+          "type": 2
+        },
+        {
           "x": 400,
           "y": 500,
           "w": 50,
@@ -110,12 +131,119 @@
           "w": 50,
           "h": 50,
           "type": 14
+        },
+        {
+          "x": 1150,
+          "y": 400,
+          "w": 50,
+          "h": 50,
+          "type": 12
+        },
+        {
+          "x": 1200,
+          "y": 400,
+          "w": 50,
+          "h": 50,
+          "type": 14
+        },
+        {
+          "x": 1350,
+          "y": 300,
+          "w": 50,
+          "h": 50,
+          "type": 12
+        },
+        {
+          "x": 1400,
+          "y": 300,
+          "w": 50,
+          "h": 50,
+          "type": 13
+        },
+        {
+          "x": 1450,
+          "y": 300,
+          "w": 50,
+          "h": 50,
+          "type": 14
+        },
+        {
+          "x": 800,
+          "y": 200,
+          "w": 50,
+          "h": 50,
+          "type": 0
+        },
+        {
+          "x": 850,
+          "y": 200,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 900,
+          "y": 200,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 950,
+          "y": 200,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 1000,
+          "y": 200,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 1050,
+          "y": 200,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 1100,
+          "y": 200,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 1150,
+          "y": 200,
+          "w": 50,
+          "h": 50,
+          "type": 1
+        },
+        {
+          "x": 1200,
+          "y": 200,
+          "w": 50,
+          "h": 50,
+          "type": 2
         }
       ],
       "items": [
         {
-          "x": 900,
+          "x": 1050,
           "y": 330,
+          "w": 50,
+          "h": 50,
+          "frame_rate_ms": 80,
+          "move_rate_ms": 80,
+          "is_active": true
+        },
+        {
+          "x": 1100,
+          "y": 400,
           "w": 50,
           "h": 50,
           "frame_rate_ms": 80,
@@ -131,8 +259,36 @@
           "speed_run": 5,
           "gravity": 14,
           "jump_power": 30,
-          "frame_rate_ms": 150,
-          "move_rate_ms": 50,
+          "frame_rate_ms": 100,
+          "move_rate_ms": 20,
+          "jump_height": 140,
+          "p_scale": 0.08,
+          "interval_time_jump": 300,
+          "is_active": true
+        },
+        {
+          "x": 1050,
+          "y": 100,
+          "speed_walk": 6,
+          "speed_run": 5,
+          "gravity": 14,
+          "jump_power": 30,
+          "frame_rate_ms": 100,
+          "move_rate_ms": 20,
+          "jump_height": 140,
+          "p_scale": 0.08,
+          "interval_time_jump": 300,
+          "is_active": true
+        },
+        {
+          "x": 1100,
+          "y": 100,
+          "speed_walk": 6,
+          "speed_run": 5,
+          "gravity": 14,
+          "jump_power": 30,
+          "frame_rate_ms": 100,
+          "move_rate_ms": 20,
           "jump_height": 140,
           "p_scale": 0.08,
           "interval_time_jump": 300,
@@ -236,7 +392,7 @@
       ]
     },
     "l3": {
-      "background_image": "",
+      "background_image": "images/locations/set_bg_02/jungle.jpg",
       "platforms": [
         {
           "x": 400,

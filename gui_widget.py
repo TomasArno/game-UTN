@@ -24,20 +24,25 @@ class Widget:
         self.y = y
         self.w = w
         self.h = h
+        self._text = text
         self.color_background = color_background
         self.color_border = color_border
+
         if image_background != None:
-            self.image_background = pygame.image.load(image_background)
-            self.image_background = pygame.transform.scale(
-                self.image_background, (w, h)
-            ).convert_alpha()
+            self.set_image(image_background)
         else:
             self.image_background = None
-        self._text = text
+
         if self._text != None:
             pygame.font.init()
             self._font_sys = pygame.font.SysFont(font, font_size)
             self._font_color = font_color
+
+    def set_image(self, image_background):
+        self.image_background = pygame.image.load(image_background)
+        self.image_background = pygame.transform.scale(
+            self.image_background, (self.w, self.h)
+        ).convert_alpha()
 
     def render(self):
         self.slave_surface = pygame.Surface((self.w, self.h), pygame.SRCALPHA)

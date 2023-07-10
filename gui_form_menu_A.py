@@ -2,66 +2,114 @@ from pygame.locals import *
 from constantes import *
 from gui_form import Form
 from gui_button import Button
-from gui_textbox import TextBox
-from gui_progressbar import ProgressBar
+import pygame
 
 
 class FormMenuA(Form):
     def __init__(
-        self, name, master_surface, x, y, w, h, color_background, color_border, active
+        self, name, master_surface, w, h, image_background, color_border, active
     ):
         super().__init__(
-            name, master_surface, x, y, w, h, color_background, color_border, active
+            name,
+            master_surface,
+            w,
+            h,
+            color_border,
+            active,
+            image_background,
+            x=ANCHO_VENTANA / 2 - w / 2,
+            y=ALTO_VENTANA / 2 - h / 2,
         )
-        self.x = ANCHO_VENTANA / 2 - self.w / 2
-        self.y = ALTO_VENTANA / 2 - self.h / 2
-        self.slave_rect.x = self.x
-        self.slave_rect.y = self.y
 
-        # self.boton1 = Button(
+        # self.boton2 = Button(
         #     master=self,
-        #     x=20,
-        #     y=20,
-        #     w=140,
+        #     x=30,
+        #     y=180,
+        #     w=100,
         #     h=50,
         #     color_background=None,
         #     color_border=None,
-        #     image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
-        #     on_click=self.on_click_boton1,
-        #     on_click_param="",
-        #     text="SUMA +",
+        #     image_background="images/gui/jungle/bubble/level.png",
+        #     on_click=self.on_click_boton3,
+        #     on_click_param="form_game_L1",
         #     font="Verdana",
         #     font_size=30,
         #     font_color=C_WHITE,
         # )
-        # self.boton2 = Button(
+        self.boton1 = Button(
+            master=self,
+            x=140,
+            y=180,
+            w=25,
+            h=50,
+            color_background=None,
+            color_border=None,
+            image_background="images/gui/jungle/bubble/1.png",
+            on_click=self.on_click_boton3,
+            on_click_param="form_game_L1",
+            font="Verdana",
+            font_size=30,
+            font_color=C_WHITE,
+        )
+
+        # self.boton8 = Button(
         #     master=self,
-        #     x=20,
-        #     y=80,
-        #     w=140,
+        #     x=165,
+        #     y=230,
+        #     w=100,
         #     h=50,
         #     color_background=None,
         #     color_border=None,
-        #     image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
-        #     on_click=self.on_click_boton2,
-        #     on_click_param="",
-        #     text="RESTA -",
+        #     image_background="images/gui/jungle/bubble/level.png",
+        #     on_click=self.on_click_boton3,
+        #     on_click_param="form_game_L1",
+        #     font="Verdana",
+        #     font_size=30,
+        #     font_color=C_WHITE,
+        # )
+
+        self.boton2 = Button(
+            master=self,
+            x=275,
+            y=230,
+            w=25,
+            h=50,
+            color_background=None,
+            color_border=None,
+            image_background="images/gui/jungle/level_select/lock.png",
+            on_click=self.on_click_boton3,
+            on_click_param="form_game_L2",
+            font="Verdana",
+            font_size=30,
+            font_color=C_WHITE,
+        )
+
+        # self.boton9 = Button(
+        #     master=self,
+        #     x=300,
+        #     y=280,
+        #     w=100,
+        #     h=50,
+        #     color_background=None,
+        #     color_border=None,
+        #     image_background="images/gui/jungle/bubble/level.png",
+        #     on_click=self.on_click_boton3,
+        #     on_click_param="form_game_L1",
         #     font="Verdana",
         #     font_size=30,
         #     font_color=C_WHITE,
         # )
         self.boton3 = Button(
             master=self,
-            x=20,
-            y=140,
-            w=140,
+            x=410,
+            y=280,
+            w=25,
             h=50,
             color_background=None,
             color_border=None,
-            image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
+            image_background="images/gui/jungle/level_select/lock.png",
             on_click=self.on_click_boton3,
-            on_click_param="form_game_L1",
-            text="JUGAR l1",
+            on_click_param="form_game_L3",
             font="Verdana",
             font_size=30,
             font_color=C_WHITE,
@@ -69,48 +117,15 @@ class FormMenuA(Form):
 
         self.boton4 = Button(
             master=self,
-            x=20,
-            y=200,
-            w=140,
+            x=260,
+            y=self.h - 60,
+            w=60,
             h=50,
             color_background=None,
             color_border=None,
-            image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
+            image_background="images/gui/jungle/btn/prize.png",
             on_click=self.on_click_boton3,
-            on_click_param="form_game_L2",
-            text="JUGAR l2",
-            font="Verdana",
-            font_size=30,
-            font_color=C_WHITE,
-        )
-        self.boton5 = Button(
-            master=self,
-            x=20,
-            y=260,
-            w=140,
-            h=50,
-            color_background=None,
-            color_border=None,
-            image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
-            on_click=self.on_click_boton3,
-            on_click_param="form_game_L3",
-            text="JUGAR l3",
-            font="Verdana",
-            font_size=30,
-            font_color=C_WHITE,
-        )
-        self.boton6 = Button(
-            master=self,
-            x=self.w - 140 - 20,
-            y=320,
-            w=140,
-            h=50,
-            color_background=None,
-            color_border=None,
-            image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
-            on_click=self.on_click_boton3,
-            on_click_param="form_game_L3",
-            text="SCORE",
+            on_click_param="",
             font="Verdana",
             font_size=30,
             font_color=C_WHITE,
@@ -132,44 +147,7 @@ class FormMenuA(Form):
         #     font_color=C_WHITE,
         # )
 
-        # self.txt1 = TextBox(
-        #     master=self,
-        #     x=200,
-        #     y=50,
-        #     w=240,
-        #     h=50,
-        #     color_background=None,
-        #     color_border=None,
-        #     image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_XL_08.png",
-        #     text="Text",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_BLACK,
-        # )
-        # self.pb1 = ProgressBar(
-        #     master=self,
-        #     x=200,
-        #     y=150,
-        #     w=240,
-        #     h=50,
-        #     color_background=None,
-        #     color_border=None,
-        #     image_background="images/gui/set_gui_01/Comic_Border/Bars/Bar_Background01.png",
-        #     image_progress="images/gui/set_gui_01/Comic_Border/Bars/Bar_Segment05.png",
-        #     value=3,
-        #     value_max=8,
-        # )
-
-        self.lista_widget = [
-            # self.boton1,
-            # self.boton2,
-            self.boton3,
-            self.boton4,
-            self.boton5,
-            self.boton6,
-            # self.txt1,
-            # self.pb1,
-        ]
+        self.lista_widget = [self.boton1, self.boton2, self.boton3, self.boton4]
 
     def on_click_boton1(self, parametro):
         self.pb1.value += 1
@@ -177,14 +155,30 @@ class FormMenuA(Form):
     def on_click_boton2(self, parametro):
         self.pb1.value -= 1
 
-    def on_click_boton3(self, parametro):
+    def on_click_boton3(
+        self, parametro
+    ):  # si agrego boton que no sea para ir a algun nivel tiene que ser otro boton
+        # self.set_actual_level(parametro)
+
         self.set_active(parametro)
 
     def update(self, lista_eventos, keys, delta_ms):
         for aux_widget in self.lista_widget:
             aux_widget.update(lista_eventos)
 
+        if "l1" in self.levels_completed:
+            self.boton2.set_image("images/gui/jungle/bubble/2.png")
+        if "l2" in self.levels_completed:
+            self.boton3.set_image("images/gui/jungle/bubble/3.png")
+
     def draw(self):
         super().draw()
         for aux_widget in self.lista_widget:
             aux_widget.draw()
+
+        image_header = pygame.transform.scale(
+            pygame.image.load("images/gui/jungle/level_select/header.png"),
+            (self.w, 150),
+        ).convert_alpha()
+
+        self.surface.blit(image_header, (0, 0))
