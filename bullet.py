@@ -69,7 +69,8 @@ class Bullet:
             if self.owner != aux_enemy and self.rect.colliderect(
                 aux_enemy.collition_rect
             ):
-                aux_enemy.receive_attack("bullet", player)
+                if aux_enemy.is_active:
+                    aux_enemy.receive_attack("bullet", player)
                 self.is_active = False
 
         for platform in plataform_list:

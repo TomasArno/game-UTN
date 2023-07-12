@@ -16,7 +16,6 @@ class Player:
         frame_rate_ms,
         move_rate_ms,
         jump_height,
-        on_shoot,
         p_scale=1,
         interval_time_jump=100,
         interval_time_attack=100,
@@ -134,6 +133,15 @@ class Player:
         self.collition_rect = pygame.Rect(
             x + self.rect.width / 3, y, self.rect.width / 3, self.rect.height
         )
+        self.collition_rect_knife_r = pygame.Rect(
+            self.collition_rect.x + self.collition_rect.width,
+            y + self.rect.h / 4,
+            20,
+            self.rect.height / 2,
+        )
+        self.collition_rect_knife_l = pygame.Rect(
+            self.collition_rect.x - 25, y + self.rect.h / 4, 25, self.rect.height / 2
+        )
         self.ground_collition_rect = pygame.Rect(self.collition_rect)
         self.ground_collition_rect.height = GROUND_COLLIDE_H
         self.ground_collition_rect.y = y + self.rect.height - GROUND_COLLIDE_H
@@ -145,7 +153,6 @@ class Player:
         self.is_fall = False
         self.is_knife = False
         self.is_shoot = False
-        self.on_shoot = on_shoot
 
         self.y_start_jump = 0
         self.jump_height = jump_height
@@ -174,7 +181,7 @@ class Player:
                 self.move_x = -self.speed_walk
                 self.animation = self.walk_l
 
-    def shoot(self, on_off=True):
+    def shoot(self, on_off=True, bullet_list=None):
         self.is_shoot = on_off
         if self.is_shoot:
             self.frame = 0
@@ -183,7 +190,7 @@ class Player:
             else:
                 self.animation = self.shoot_l
 
-            self.on_shoot(self.direction)
+            self.shoot_player(bullet_list)
 
     def knife(self, on_off=True, enemy_list=None):
         self.is_knife = on_off
@@ -194,10 +201,10 @@ class Player:
                     self.animation = self.knife_r
                 else:
                     self.animation = self.knife_l
-                if enemy_list:
-                    for enemy in enemy_list:
-                        if self.collition_rect.colliderect(enemy.collition_rect):
-                            enemy.receive_attack("knife")
+
+                enemy = self.check_collition_knife(enemy_list)
+                if enemy:
+                    enemy.receive_attack("knife", self)
 
     def jump(self, on_off=True):
         if on_off and self.is_jump == False and self.is_fall == False:
@@ -239,6 +246,41 @@ class Player:
             self.move_y = 0
             self.frame = 0
 
+    def check_collition_knife(self, enemy_list):
+        if enemy_list:
+            for enemy in enemy_list:
+                if (
+                    self.collition_rect_knife_l.colliderect(enemy.collition_rect)
+                    or self.collition_rect_knife_r.colliderect(enemy.collition_rect)
+                    and enemy.is_active
+                ):
+                    return enemy
+                else:
+                    return None
+
+    def shoot_player(self, bullet_list):
+        bullet_end_x = None
+        if self.direction == 0:
+            bullet_end_x = 0
+        else:
+            bullet_end_x = ANCHO_VENTANA
+
+        bullet_list.append(
+            Bullet(
+                self,
+                self.rect.centerx,
+                self.rect.centery,
+                bullet_end_x,
+                self.rect.centery,
+                20,
+                path="images/gui/set_gui_01/Comic_Border/Bars/Bar_Segment05.png",
+                frame_rate_ms=100,
+                move_rate_ms=20,
+                width=5,
+                height=5,
+            )
+        )
+
     def receive_attack(self):
         self.lives -= 1
         self.score -= 50
@@ -273,11 +315,15 @@ class Player:
         self.rect.x += delta_x
         self.collition_rect.x += delta_x
         self.ground_collition_rect.x += delta_x
+        self.collition_rect_knife_r.x += delta_x
+        self.collition_rect_knife_l.x += delta_x
 
     def change_y(self, delta_y):
         self.rect.y += delta_y
         self.collition_rect.y += delta_y
         self.ground_collition_rect.y += delta_y
+        self.collition_rect_knife_r.y += delta_y
+        self.collition_rect_knife_l.y += delta_y
 
     def do_movement(self, delta_ms, plataform_list):
         self.time_transcurrido_move += delta_ms
@@ -326,12 +372,18 @@ class Player:
             pygame.draw.rect(
                 screen, color=(255, 255, 0), rect=self.ground_collition_rect
             )
+            pygame.draw.rect(
+                screen, color=(0, 0, 255), rect=self.collition_rect_knife_r
+            )
+            pygame.draw.rect(
+                screen, color=(0, 0, 255), rect=self.collition_rect_knife_l
+            )
 
         if not self.finish_dead_animation:
             self.image = self.animation[self.frame]
             screen.blit(self.image, self.rect)
 
-    def events(self, delta_ms, keys, enemy_list):
+    def events(self, delta_ms, keys, enemy_list, bullet_list):
         self.time_transcurrido += delta_ms
 
         if self.is_dead:
@@ -371,14 +423,14 @@ class Player:
                 if (
                     self.time_transcurrido - self.time_last_jump
                 ) > self.interval_time_jump:
-                    self.jump(True)
+                    self.jump(on_off=True)
                     self.time_last_jump = self.time_transcurrido
 
             if not keys[pygame.K_s]:
-                self.shoot(False)
+                self.shoot(on_off=False)
 
             if not keys[pygame.K_a]:
-                self.knife(False)
+                self.knife(on_off=False)
 
             if (
                 keys[pygame.K_s]
@@ -389,7 +441,7 @@ class Player:
                 if (
                     self.time_transcurrido - self.time_last_attack
                 ) > self.interval_time_attack:
-                    self.shoot()
+                    self.shoot(bullet_list=bullet_list)
                     self.time_last_attack = self.time_transcurrido
 
             if (

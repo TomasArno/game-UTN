@@ -7,6 +7,7 @@ from auxiliar import *
 class Form:
     forms_dict = {}
     levels_completed: list = []
+    players_name = None
 
     def __init__(
         self,
@@ -29,12 +30,11 @@ class Form:
         self.image_background = image_background
         self.color_border = color_border
 
-        self.surface: pygame.Surface = pygame.Surface((w, h))
+        self.surface: pygame.Surface = pygame.Surface((w, h), pygame.SRCALPHA, 32)
         self.slave_rect: pygame.Rect = self.surface.get_rect()
         self.slave_rect.x = x
         self.slave_rect.y = y
         self.active = active
-        self.actual_level = False
 
         self.start_form_time = pygame.time.Clock()
         self.current_time = 0
@@ -45,6 +45,10 @@ class Form:
             ).convert_alpha()
 
             self.surface.blit(self.image_background, (0, 0))
+
+    @staticmethod
+    def set_players_name(players_name):
+        Form.players_name = players_name
 
     @staticmethod
     def set_active(name):
@@ -59,33 +63,13 @@ class Form:
                 return aux_form
         return None
 
-    # @staticmethod
-    # def set_actual_level(name):
-    #     for level in Form.forms_dict.values():
-    #         level.actual_level = False
-    #     Form.forms_dict[name].actual_level = True
-
-    # @staticmethod
-    # def get_actual_level():
-    #     for level in Form.forms_dict.values():
-    #         if level.actual_level:
-    #             return level
-    #     return None
-
-    #     # self.surface.fill(C_GREEN)
-    #     # self.slave_rect.x = 1300
-    #     font = Auxiliar.generate_text("Arial", 100, "YOU WIN", C_GREEN)
-    #     self.surface.blit(font, (ANCHO_VENTANA / 2.5, ALTO_VENTANA / 2.5))
-    #     print(font.get_rect())
-
-    #     pass
-    #     # self.surface.fill(C_BLACK)
-    #     # font = Auxiliar.generate_text("Arial", 100, "YOU LOSE", C_RED)
-    #     # self.surface.blit(font, (ANCHO_VENTANA / 2.5, ALTO_VENTANA / 2.5))
+    @staticmethod
+    def get_form(form_name):
+        for aux_form in Form.forms_dict:
+            if aux_form == form_name:
+                return Form.forms_dict[aux_form]
+        return None
 
     def draw(self):
         if self.active:
-            if DEBUG:
-                pygame.draw.rect(self.surface, color=(0, 255, 0), rect=self.slave_rect)
-
             self.master_surface.blit(self.surface, self.slave_rect)

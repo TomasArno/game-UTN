@@ -11,12 +11,9 @@ class Enemy:
         speed_walk,
         speed_run,
         gravity,
-        jump_power,
         frame_rate_ms,
         move_rate_ms,
-        jump_height,
         p_scale=1,
-        interval_time_jump=100,
         is_active=True,
     ) -> None:
         self.walk_r = Auxiliar.getSurfaceFromSeparateFiles(
@@ -83,7 +80,6 @@ class Enemy:
         self.speed_walk = speed_walk
         self.speed_run = speed_run
         self.gravity = gravity
-        self.jump_power = jump_power
         self.animation = self.stay_r
         self.direction = DIRECTION_R
         self.image = self.animation[self.frame]
@@ -91,17 +87,17 @@ class Enemy:
         self.rect.x = x
         self.rect.y = y
         self.collition_rect = pygame.Rect(
-            x + self.rect.width / 3, y, self.rect.width / 3, self.rect.height
+            x + self.rect.width / 4, y, self.rect.width / 2, self.rect.height
         )
         self.ground_collition_rect = pygame.Rect(self.collition_rect)
         self.ground_collition_rect.height = GROUND_COLLIDE_H
         self.ground_collition_rect.y = y + self.rect.height - GROUND_COLLIDE_H
 
+        self.is_active = is_active
         self.is_jump = False
         self.is_fall = False
         self.is_shoot = False
         self.is_knife = False
-        self.is_active = True
 
         self.finish_dead_animation = False
 
@@ -110,11 +106,9 @@ class Enemy:
         self.tiempo_transcurrido_move = 0
         self.move_rate_ms = move_rate_ms
         self.y_start_jump = 0
-        self.jump_height = jump_height
 
         self.tiempo_transcurrido = 0
         self.tiempo_last_jump = 0
-        self.interval_time_jump = interval_time_jump
 
     def is_on_plataform(self, plataform_list):
         retorno = False
@@ -198,14 +192,12 @@ class Enemy:
                     if self.collition_rect.colliderect(player.collition_rect):
                         if self.check_view_direction():
                             self.animation = self.attack_l
-
                         else:
                             self.animation = self.attack_r
 
                     else:
                         if self.check_view_direction():
                             self.animation = self.walk_l
-
                         else:
                             self.animation = self.walk_r
 
@@ -221,6 +213,7 @@ class Enemy:
         self.tiempo_transcurrido_animation += delta_ms
         if self.tiempo_transcurrido_animation >= self.frame_rate_ms:
             self.tiempo_transcurrido_animation = 0
+
             if self.frame < len(self.animation) - 1:
                 self.frame += 1
             else:
@@ -228,6 +221,7 @@ class Enemy:
 
                 if self.animation == self.attack_l or self.animation == self.attack_r:
                     player.receive_attack()
+
                 if not self.is_active:
                     self.finish_dead_animation = True
 
@@ -241,9 +235,8 @@ class Enemy:
             pygame.draw.rect(screen, color=(255, 255, 0), rect=self.rect)
             pygame.draw.rect(screen, color=(255, 0, 0), rect=self.collition_rect)
 
-        if not self.finish_dead_animation:
-            self.image = self.animation[self.frame]
-            screen.blit(self.image, self.rect)
+        self.image = self.animation[self.frame]
+        screen.blit(self.image, self.rect)
 
     def set_enemies(level):
         level_enemies = Auxiliar.leer_json("config.json", "levels")[level]["enemies"]
@@ -258,17 +251,11 @@ class Enemy:
                     enemy["speed_walk"],
                     enemy["speed_run"],
                     enemy["gravity"],
-                    enemy["jump_power"],
                     enemy["frame_rate_ms"],
                     enemy["move_rate_ms"],
-                    enemy["jump_height"],
                     enemy["p_scale"],
-                    enemy["interval_time_jump"],
                     enemy["is_active"],
                 )
             )
 
         return enemies_list
-
-    # def receive_shoot(self):
-    #     self.lives -= 1

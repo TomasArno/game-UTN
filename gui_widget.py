@@ -14,6 +14,7 @@ class Widget:
         color_background,
         color_border,
         image_background,
+        is_active,
         text,
         font,
         font_size,
@@ -27,9 +28,10 @@ class Widget:
         self._text = text
         self.color_background = color_background
         self.color_border = color_border
+        self.is_active = is_active
 
         if image_background != None:
-            self.set_image(image_background)
+            self.set_background_image(image_background)
         else:
             self.image_background = None
 
@@ -38,7 +40,7 @@ class Widget:
             self._font_sys = pygame.font.SysFont(font, font_size)
             self._font_color = font_color
 
-    def set_image(self, image_background):
+    def set_background_image(self, image_background):
         self.image_background = pygame.image.load(image_background)
         self.image_background = pygame.transform.scale(
             self.image_background, (self.w, self.h)
@@ -89,4 +91,5 @@ class Widget:
             pygame.draw.rect(
                 self.master_form.surface, color=(255, 0, 0), rect=self.slave_rect
             )
+
         self.master_form.surface.blit(self.slave_surface, self.slave_rect)

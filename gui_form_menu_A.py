@@ -2,6 +2,7 @@ from pygame.locals import *
 from constantes import *
 from gui_form import Form
 from gui_button import Button
+from gui_form_game import FormGame
 import pygame
 
 
@@ -21,30 +22,15 @@ class FormMenuA(Form):
             y=ALTO_VENTANA / 2 - h / 2,
         )
 
-        # self.boton2 = Button(
-        #     master=self,
-        #     x=30,
-        #     y=180,
-        #     w=100,
-        #     h=50,
-        #     color_background=None,
-        #     color_border=None,
-        #     image_background="images/gui/jungle/bubble/level.png",
-        #     on_click=self.on_click_boton3,
-        #     on_click_param="form_game_L1",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_WHITE,
-        # )
         self.boton1 = Button(
             master=self,
-            x=140,
+            x=self.w / 4 - 33,
             y=180,
-            w=25,
-            h=50,
+            w=65,
+            h=65,
             color_background=None,
             color_border=None,
-            image_background="images/gui/jungle/bubble/1.png",
+            image_background="images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Menu/Levels/01.png",
             on_click=self.on_click_boton3,
             on_click_param="form_game_L1",
             font="Verdana",
@@ -52,31 +38,28 @@ class FormMenuA(Form):
             font_color=C_WHITE,
         )
 
-        # self.boton8 = Button(
-        #     master=self,
-        #     x=165,
-        #     y=230,
-        #     w=100,
-        #     h=50,
-        #     color_background=None,
-        #     color_border=None,
-        #     image_background="images/gui/jungle/bubble/level.png",
-        #     on_click=self.on_click_boton3,
-        #     on_click_param="form_game_L1",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_WHITE,
-        # )
-
         self.boton2 = Button(
             master=self,
-            x=275,
-            y=230,
-            w=25,
+            x=self.w / 2 - 25,
+            y=184,
+            w=50,
             h=50,
             color_background=None,
             color_border=None,
             image_background="images/gui/jungle/level_select/lock.png",
+            font="Verdana",
+            font_size=30,
+            font_color=C_WHITE,
+        )
+        self.boton3 = Button(
+            master=self,
+            x=self.w / 2 - 33,
+            y=180,
+            w=65,
+            h=65,
+            color_background=None,
+            color_border=None,
+            image_background="images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Menu/Levels/02.png",
             on_click=self.on_click_boton3,
             on_click_param="form_game_L2",
             font="Verdana",
@@ -84,40 +67,38 @@ class FormMenuA(Form):
             font_color=C_WHITE,
         )
 
-        # self.boton9 = Button(
-        #     master=self,
-        #     x=300,
-        #     y=280,
-        #     w=100,
-        #     h=50,
-        #     color_background=None,
-        #     color_border=None,
-        #     image_background="images/gui/jungle/bubble/level.png",
-        #     on_click=self.on_click_boton3,
-        #     on_click_param="form_game_L1",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_WHITE,
-        # )
-        self.boton3 = Button(
+        self.boton4 = Button(
             master=self,
-            x=410,
-            y=280,
-            w=25,
+            x=self.w / 1.25 - 50,
+            y=184,
+            w=50,
             h=50,
             color_background=None,
             color_border=None,
             image_background="images/gui/jungle/level_select/lock.png",
+            font="Verdana",
+            font_size=30,
+            font_color=C_WHITE,
+        )
+
+        self.boton5 = Button(
+            master=self,
+            x=self.w / 1.25 - 50,
+            y=180,
+            w=65,
+            h=65,
+            color_background=None,
+            color_border=None,
+            image_background="images/PIXEL ADVENTURE/PIXEL ADVENTURE/Recursos/Menu/Levels/03.png",
             on_click=self.on_click_boton3,
             on_click_param="form_game_L3",
             font="Verdana",
             font_size=30,
             font_color=C_WHITE,
         )
-
-        self.boton4 = Button(
+        self.boton6 = Button(
             master=self,
-            x=260,
+            x=self.w / 2 - 30,
             y=self.h - 60,
             w=60,
             h=50,
@@ -125,29 +106,16 @@ class FormMenuA(Form):
             color_border=None,
             image_background="images/gui/jungle/btn/prize.png",
             on_click=self.on_click_boton3,
-            on_click_param="",
+            on_click_param="form_menu_score",
             font="Verdana",
             font_size=30,
             font_color=C_WHITE,
         )
-        # self.boton5 = Button(
-        #     master=self,
-        #     x=20,
-        #     y=260,
-        #     w=140,
-        #     h=50,
-        #     color_background=None,
-        #     color_border=None,
-        #     image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
-        #     on_click=self.on_click_boton3,
-        #     on_click_param="form_menu_B",
-        #     text="SQL",
-        #     font="Verdana",
-        #     font_size=30,
-        #     font_color=C_WHITE,
-        # )
 
-        self.lista_widget = [self.boton1, self.boton2, self.boton3, self.boton4]
+        self.flag_l1 = True
+        self.flag_l2 = True
+
+        self.lista_widget = [self.boton1, self.boton2, self.boton4]
 
     def on_click_boton1(self, parametro):
         self.pb1.value += 1
@@ -155,21 +123,27 @@ class FormMenuA(Form):
     def on_click_boton2(self, parametro):
         self.pb1.value -= 1
 
-    def on_click_boton3(
-        self, parametro
-    ):  # si agrego boton que no sea para ir a algun nivel tiene que ser otro boton
-        # self.set_actual_level(parametro)
-
+    def on_click_boton3(self, parametro):
         self.set_active(parametro)
 
     def update(self, lista_eventos, keys, delta_ms):
         for aux_widget in self.lista_widget:
             aux_widget.update(lista_eventos)
 
-        if "l1" in self.levels_completed:
-            self.boton2.set_image("images/gui/jungle/bubble/2.png")
-        if "l2" in self.levels_completed:
-            self.boton3.set_image("images/gui/jungle/bubble/3.png")
+        if FormGame.game_completed:
+            self.lista_widget.append(self.boton6)
+
+        if "l1" in Form.levels_completed and self.flag_l1:
+            self.flag_l1 = False
+            self.boton2.inactive()
+            self.lista_widget.remove(self.boton2)
+            self.lista_widget.append(self.boton3)
+
+        if "l2" in Form.levels_completed and self.flag_l2:
+            self.flag_l2 = False
+            self.boton4.inactive()
+            self.lista_widget.remove(self.boton4)
+            self.lista_widget.append(self.boton5)
 
     def draw(self):
         super().draw()

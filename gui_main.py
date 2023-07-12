@@ -3,11 +3,13 @@ from pygame.locals import *
 import sys
 from constantes import *
 from gui_form import Form
-from gui_form_menu_init import FormMenuInit
 from gui_form_menu_A import FormMenuA
 from gui_form_menu_B import FormMenuB
 from gui_form_menu_C import FormMenuC
+from gui_form_menu_D import FormMenuD
 from gui_form_game import FormGame
+from gui_form_menu_init import FormMenuInit
+from gui_form_menu_score import FormMenuScore
 
 flags = DOUBLEBUF
 screen = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), flags, 16)
@@ -26,6 +28,16 @@ form_menu_init = FormMenuInit(
     image_background="images/gui/jungle/level_select/bg.png",
     color_border=(255, 0, 255),
     active=True,
+)
+
+form_menu_score = FormMenuScore(
+    name="form_menu_score",
+    master_surface=screen,
+    w=500,
+    h=500,
+    image_background="images/gui/jungle/level_select/bg.png",
+    color_border=(255, 0, 255),
+    active=False,
 )
 
 form_menu_A = FormMenuA(
@@ -57,6 +69,18 @@ form_menu_C = FormMenuC(
     color_border=(255, 0, 255),
     active=False,
 )
+
+form_menu_D = FormMenuD(
+    name="form_menu_D",
+    master_surface=screen,
+    w=500,
+    h=500,
+    image_background="images/gui/jungle/level_select/bg.png",
+    color_border=(255, 0, 255),
+    active=False,
+)
+
+form_menu_score.create_table()
 
 form_game_L1 = FormGame(
     name="form_game_L1",
@@ -93,7 +117,6 @@ form_game_L3 = FormGame(
     level="l3",
     event_cronometer=event_1000ms,
 )
-
 
 while True:
     lista_eventos = pygame.event.get()

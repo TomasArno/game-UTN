@@ -1,20 +1,21 @@
-import pygame
 from pygame.locals import *
 from constantes import *
 from gui_form import Form
 from gui_button import Button
-from gui_textbox import TextBox
 from gui_progressbar import ProgressBar
 from player import Player
 from enemigo import Enemy
 from plataforma import Plataform
 from background import Background
-from bullet import Bullet
 from botin import Item
 from auxiliar import Auxiliar
+from gui_form_menu_score import FormMenuScore
 
 
 class FormGame(Form):
+    game_completed = False
+    flag_completed = False
+
     def __init__(
         self,
         name,
@@ -39,18 +40,8 @@ class FormGame(Form):
 
         self.bullet_list = []
         self.plataform_list = Plataform.set_platforms(level)
-        self.enemy_list: list = Enemy.set_enemies(level)
-        self.items_list: list = Item.set_items(level)
 
-        self.set_timer()
-
-        # self.aux_items_list = []
-        # self.aux_enemies_list = []
-
-        # self.inactive_enemy_list: list = []
-        # self.inactive_items_list: list = []
-
-        # # --- GUI WIDGET ---
+        # --- GUI WIDGET ---
 
         self.boton1 = Button(
             master=self,
@@ -86,45 +77,25 @@ class FormGame(Form):
 
         # --- GAME ELEMNTS ---
         self.static_background = Background(x=0, y=0, width=w, height=h, path=level)
+        self.total_score = 0
+        self.level_score = 0
         self.set_player()
+        self.set_enemies()
+        self.set_items()
+        self.set_timer()
+
+        self.form_B = self.get_form("form_menu_B")
+        self.form_D = self.get_form("form_menu_D")
+        self.form_score: FormMenuScore = self.get_form("form_menu_score")
 
     def on_click_boton(self, parametro):
         self.set_active(parametro)
 
-    def reload_components(self, delta_ms):
-        pass
-        # if not self.active:
-        #     print("enemy list", self.enemy_list)
-        #     self.enemy_list.extend(self.aux_enemies_list)
-        #     print("enemy list desp", self.enemy_list)
-        #     self.items_list.extend(self.aux_items_list)
+    def set_enemies(self):
+        self.enemy_list: list = Enemy.set_enemies(self.level)
 
-    #     # self.tiempo_transcurrido_reload += delta_ms
-    #     # if self.tiempo_transcurrido_reload >= self.reload_rate_ms:
-    #     #     self.tiempo_transcurrido_reload = 0
-    #     print(f"estado {self.name}", self.active)
-    #         self.enemy_list: list = Enemy.set_enemies(self.level)
-    #         self.items_list: list = Item.set_items(self.level)
-    #         self.player_1.move_x = self.aux_x
-    #         self.player_1.move_y = self.aux_y
-    #         self.player_1.rect.x = self.aux_x
-    #         self.player_1.rect.y = self.aux_y
-    def set_player(self):
-        self.player_1 = Player(
-            x=0,
-            y=400,
-            speed_walk=10,
-            speed_run=12,
-            gravity=14,
-            jump_power=30,
-            frame_rate_ms=100,
-            move_rate_ms=50,
-            jump_height=140,
-            p_scale=0.2,
-            interval_time_jump=300,
-            interval_time_attack=300,
-            on_shoot=self.shoot_player,
-        )
+    def set_items(self):
+        self.items_list: list = Item.set_items(self.level)
 
     def set_timer(self):
         if self.level == "l1":
@@ -136,6 +107,22 @@ class FormGame(Form):
         elif self.level == "l3":
             self.timer = TIME_LEVEL_3
 
+    def set_player(self):
+        self.player_1 = Player(
+            x=0,
+            y=500,
+            speed_walk=10,
+            speed_run=12,
+            gravity=14,
+            jump_power=30,
+            frame_rate_ms=100,
+            move_rate_ms=50,
+            jump_height=140,
+            p_scale=0.2,
+            interval_time_jump=300,
+            interval_time_attack=300,
+        )
+
     def update_timer(self):
         self.timer_surface = Auxiliar.generate_text(
             "Arial", 20, f"Time left:{self.timer}", C_RED
@@ -146,63 +133,61 @@ class FormGame(Form):
             "Arial", 20, f"Score:{self.player_1.score}", C_RED
         )
 
-    def shoot_player(self, direction):
-        bullet_end_x = None
-        if direction == 0:
-            bullet_end_x = 0
-        else:
-            bullet_end_x = ANCHO_VENTANA
-
-        self.bullet_list.append(
-            Bullet(
-                self.player_1,
-                self.player_1.rect.centerx,
-                self.player_1.rect.centery,
-                bullet_end_x,
-                self.player_1.rect.centery,
-                20,
-                path="images/gui/set_gui_01/Comic_Border/Bars/Bar_Segment05.png",
-                frame_rate_ms=100,
-                move_rate_ms=20,
-                width=5,
-                height=5,
-            )
-        )
-
     def restore_level(self):
-        self.items_list: list = Item.set_items(self.level)
-        self.enemy_list: list = Enemy.set_enemies(self.level)
         self.set_player()
+        self.set_enemies()
+        self.set_items()
         self.set_timer()
 
-    def finish_level(self):
-        Form.set_active("form_menu_A")
+    def finish_level(self, results):
+        self.level_score = self.player_1.score
+        self.form_D.set_score(self.level_score, results)
+        Form.set_active("form_menu_D")
         self.restore_level()
 
+    def check_game_completed(self):
+        if (
+            "l1" in Form.levels_completed
+            and "l2" in Form.levels_completed
+            and "l3" in Form.levels_completed
+        ):
+            FormGame.game_completed = True
+
+    def set_score_db(self):
+        self.form_score.insert_row(Form.players_name, self.level_score)
+
     def update(self, events_list, keys, delta_ms):
-        print(
-            self.timer, "timer"
-        )  # ver como imprimir el timer cuando se despliega otro form para ver que es lo que sucefe que se ponen muhcos numeros
+        self.form_B.set_last_form_played(self.name)
 
         if not self.items_list and not self.player_1.is_dead and self.timer >= 0:
             if not self.completed_level:
-                self.levels_completed.append(self.level)
                 self.completed_level = True
-
-            self.finish_level()
+                self.total_score += self.player_1.score
+                Form.levels_completed.append(self.level)
+            self.results = "win"
+            self.finish_level(self.results)
         elif (
             self.player_1.is_dead
             and self.player_1.finish_dead_animation
             or self.timer <= 0
         ):
-            self.finish_level()
+            self.results = "lose"
+            self.finish_level(self.results)
+
+        self.check_game_completed()
+
+        if FormGame.game_completed and not FormGame.flag_completed:
+            print("entre a set score db")
+            FormGame.flag_completed = True
+            self.set_score_db()
+
+        for event in events_list:
+            if event.type == self.event_timer:
+                self.timer -= 1
 
         if self.active:
-            for event in events_list:
-                if event.type == self.event_timer:
-                    self.timer -= 1
-        # else:
-        #     self.timer = 0
+            self.update_timer()
+            self.update_score()
 
         for aux_widget in self.widget_list:
             aux_widget.update(events_list)
@@ -219,17 +204,14 @@ class FormGame(Form):
             item.update(delta_ms, self.player_1)
 
         for enemy_element in self.enemy_list:
-            if enemy_element.finish_dead_animation:
+            if enemy_element.finish_dead_animation and not enemy_element.is_active:
                 self.enemy_list.remove(enemy_element)
 
             enemy_element.update(delta_ms, self.plataform_list, self.player_1)
 
-        self.player_1.events(delta_ms, keys, self.enemy_list)
+        self.player_1.events(delta_ms, keys, self.enemy_list, self.bullet_list)
         self.player_1.update(delta_ms, self.plataform_list)
         self.pb_lives.value = self.player_1.lives
-
-        self.update_timer()
-        self.update_score()
 
     def draw(self):
         super().draw()
@@ -256,5 +238,5 @@ class FormGame(Form):
             self.timer_surface, (ANCHO_VENTANA - 120, ALTO_VENTANA - 85)
         )
         self.master_surface.blit(
-            self.score_surface, (ANCHO_VENTANA - 220, ALTO_VENTANA - 85)
+            self.score_surface, (ANCHO_VENTANA - 225, ALTO_VENTANA - 85)
         )

@@ -81,7 +81,6 @@ class Item:
                 self.frame = 0
 
     def update(self, delta_ms, player):
-        # if not self.finish_dead_animation:
         self.do_movement(delta_ms, player)
         self.do_animation(delta_ms)
 

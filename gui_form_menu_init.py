@@ -59,6 +59,7 @@ class FormMenuInit(Form):
         ]
 
     def on_click_boton(self, parametro):
+        self.set_players_name(self.txt1._text)
         self.set_active(parametro)
 
     def update(self, lista_eventos, keys, delta_ms):
