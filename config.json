@@ -981,7 +981,7 @@
         {
           "x": 1150,
           "y": 100,
-          "speed_walk": 6,
+          "speed_walk": 8,
           "speed_run": 5,
           "gravity": 14,
           "frame_rate_ms": 100,
@@ -992,7 +992,7 @@
         {
           "x": 590,
           "y": 100,
-          "speed_walk": 6,
+          "speed_walk": 8,
           "speed_run": 5,
           "gravity": 14,
           "frame_rate_ms": 100,
@@ -1003,7 +1003,7 @@
         {
           "x": 600,
           "y": 100,
-          "speed_walk": 6,
+          "speed_walk": 8,
           "speed_run": 5,
           "gravity": 14,
           "frame_rate_ms": 100,

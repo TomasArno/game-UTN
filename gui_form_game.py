@@ -15,6 +15,7 @@ from gui_form_menu_score import FormMenuScore
 class FormGame(Form):
     game_completed = False
     flag_completed = False
+    total_score = 0
 
     def __init__(
         self,
@@ -77,7 +78,6 @@ class FormGame(Form):
 
         # --- GAME ELEMNTS ---
         self.static_background = Background(x=0, y=0, width=w, height=h, path=level)
-        self.total_score = 0
         self.level_score = 0
         self.set_player()
         self.set_enemies()
@@ -154,7 +154,7 @@ class FormGame(Form):
             FormGame.game_completed = True
 
     def set_score_db(self):
-        self.form_score.insert_row(Form.players_name, self.level_score)
+        self.form_score.insert_row(Form.players_name, FormGame.total_score)
 
     def update(self, events_list, keys, delta_ms):
         self.form_B.set_last_form_played(self.name)
@@ -162,7 +162,7 @@ class FormGame(Form):
         if not self.items_list and not self.player_1.is_dead and self.timer >= 0:
             if not self.completed_level:
                 self.completed_level = True
-                self.total_score += self.player_1.score
+                FormGame.total_score += self.player_1.score
                 Form.levels_completed.append(self.level)
             self.results = "win"
             self.finish_level(self.results)
